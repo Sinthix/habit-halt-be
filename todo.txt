@@ -1,0 +1,5 @@
+## need to add connection to a db
+
+## need to get the time returned by FE 
+
+## need to get the time for the next meal based on FE time
