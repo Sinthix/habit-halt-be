@@ -45,6 +45,33 @@ def get_meal():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
   
+@app.route('/getNextSmoke', methods=['GET'])
+def get_Smoke():
+    cursor = mysql.connection.cursor()
+    query = "SELECT * FROM smokes"
+    cursor.execute(query,)
+    
+    # Fetch all rows from the cursor
+    result = cursor.fetchall()
+    
+    # Get column names
+    columns = [column[0] for column in cursor.description]
+    
+    # Convert the result into a list of dictionaries
+    data = []
+    for row in result:
+        row_dict = {}
+        for i, column in enumerate(cursor.description):
+            row_dict[column[0]] = row[i]
+            # Convert timedelta object to total seconds
+            if isinstance(row[i], datetime.timedelta):
+                row_dict[column[0]] = (datetime.datetime.min + row[i]).time().isoformat()
+        data.append(row_dict)
+
+    response = jsonify(data)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
 
 if __name__ == '__main__':
     app.run(debug=True)
